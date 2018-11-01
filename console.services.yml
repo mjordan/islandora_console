@@ -1,0 +1,6 @@
+services:
+  islandora_console.islandora_console_print_title:
+    class: Drupal\islandora_console\Command\PrintTitleCommand
+    arguments: []
+    tags:
+      - { name: drupal.command }

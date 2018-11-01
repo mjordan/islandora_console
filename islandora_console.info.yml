@@ -1,0 +1,7 @@
+type: module
+name: 'Islandora Console'
+description: "Provides tools for....."
+package: islandora
+core: 8.x
+dependencies:
+  - islandora
