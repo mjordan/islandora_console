@@ -16,31 +16,18 @@ use Drupal\Console\Annotations\DrupalCommand;
  *     extensionType="module"
  * )
  */
-class PrintTitleCommand extends ContainerAwareCommand {
+class GetSolrDocsCommand extends ContainerAwareCommand {
 
   /**
    * {@inheritdoc}
    */
   protected function configure() {
     $this
-      ->setName('islandora_console:print_title')
-      ->setDescription($this->trans('commands.islandora_console.print_title.description'))
-      ->addOption('nid_file', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.islandora_console.print_tilte.options.nid_file'), NULL);
-  }
+      ->setName('islandora_console:get_solr_docs')
+      ->setDescription($this->trans('commands.islandora_console.get_solr_doc.description'))
+      ->addOption('nid_file', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.islandora_console.get_solr_doc.options.nid_file'), NULL);
 
- /**
-  * {@inheritdoc}
-  */
-  protected function initialize(InputInterface $input, OutputInterface $output) {
-    parent::initialize($input, $output);
-    // $this->getIo()->info('initialize');
-  }
-
- /**
-  * {@inheritdoc}
-  */
-  protected function interact(InputInterface $input, OutputInterface $output) {
-    // $this->getIo()->info('interact');
+    // @todo: Add options for specifying the Solr base URL and authorization credentials.
   }
 
   /**
@@ -52,8 +39,8 @@ class PrintTitleCommand extends ContainerAwareCommand {
       $nids = file($nid_file_path, FILE_IGNORE_NEW_LINES);
       foreach ($nids as $nid) {
         if ($node = \Drupal::service('entity_type.manager')->getStorage('node')->load($nid)) {
-          $title = $node->getTitle();
-          $this->getIo()->success($title);
+          $solr_results = $this->query_solr($nid);
+          print $solr_results . "\n";
         }
         else {
           $this->getIo()->warning($this->trans('commands.islandora_console.general.messages.cannotfindnode'));
@@ -63,5 +50,21 @@ class PrintTitleCommand extends ContainerAwareCommand {
     else {
       $this->getIo()->warning($this->trans('commands.islandora_console.general.messages.cannotfindfile'));
     }
+  }
+
+  /**
+   * Queries Solr's REST API for node's Solr document.
+   *
+   * @param string $nid
+   *   The node's Drupal ID.
+   *
+   * @return string
+   *   The raw JSON Solr document for the node.
+   */
+  protected function query_solr($nid) {
+     $solr_url = 'http://localhost:8983/solr/CLAW/select?q=ss_search_api_id:%22entity:node/' . $nid . ':en%22';
+     $response = \Drupal::httpClient()->get($solr_url);
+     $response_body = (string) $response->getBody();
+     return $response_body;
   }
 }

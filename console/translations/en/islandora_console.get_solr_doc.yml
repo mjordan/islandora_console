@@ -1,4 +1,4 @@
-description: "Prints a node's title."
+description: "Prints a node's Solr document."
 arguments: {}
 messages: {}
 options:

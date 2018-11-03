@@ -9,3 +9,8 @@ services:
     arguments: []
     tags:
       - { name: drupal.command }
+  islandora_console.islandora_console_get_solr_docs:
+    class: Drupal\islandora_console\Command\GetSolrDocsCommand
+    arguments: []
+    tags:
+      - { name: drupal.command }

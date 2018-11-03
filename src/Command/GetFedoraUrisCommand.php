@@ -44,12 +44,12 @@ class GetFedoraUrisCommand extends ContainerAwareCommand {
           print $nid . "," . $gemini_results['fedora'] . "\n";
         }
         else {
-          $this->getIo()->warning($this->trans('commands.islandora_console.get_fedora_uris.messages.cannotfindnode'));
+          $this->getIo()->warning($this->trans('commands.islandora_console.general.messages.cannotfindnode'));
         }
       }
     }
     else {
-      $this->getIo()->warning($this->trans('commands.islandora_console.get_fedora_uris.messages.cannotfindfile'));
+      $this->getIo()->warning($this->trans('commands.islandora_console.general.messages.cannotfindfile'));
     }
   }
 
