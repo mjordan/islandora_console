@@ -4,3 +4,8 @@ services:
     arguments: []
     tags:
       - { name: drupal.command }
+  islandora_console.islandora_console_get_fedora_uris:
+    class: Drupal\islandora_console\Command\GetFedoraUrisCommand
+    arguments: []
+    tags:
+      - { name: drupal.command }
